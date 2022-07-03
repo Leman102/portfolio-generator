@@ -1,6 +1,6 @@
 const inquirer = require('inquirer');
 
-const fs = require('fs');
+const { writeFile, copyFile } = require('./utils/generate-site.js');
 //add generatePage function
 const generatePage = require('./src/page-template.js');
 
@@ -135,67 +135,83 @@ const promptProject = portfolioData => {
         }
     });
 };
-const mockData = {
-    name: 'Leo',
-    github: 'leman102',
-    confirmAbout: true,
-    about:
-      'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
-    projects: [
-      {
-        name: 'Run Buddy',
-        description:
-          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-        languages: ['HTML', 'CSS'],
-        link: 'https://github.com/leman102/run-buddy',
-        feature: true,
-        confirmAddProject: true
-      },
-      {
-        name: 'Taskinator',
-        description:
-          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-        languages: ['JavaScript', 'HTML', 'CSS'],
-        link: 'https://github.com/leman102/taskinator',
-        feature: true,
-        confirmAddProject: true
-      },
-      {
-        name: 'Taskmaster Pro',
-        description:
-          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
-        languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
-        link: 'https://github.com/leman102/taskmaster-pro',
-        feature: false,
-        confirmAddProject: true
-      },
-      {
-        name: 'Robot Gladiators',
-        description:
-          'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
-        languages: ['JavaScript'],
-        link: 'https://github.com/leman102/robot-gladiators',
-        feature: false,
-        confirmAddProject: false
-      }
-    ]
-  };
-const pageHTML = generatePage(mockData);
+// const mockData = {
+//     name: 'Leo',
+//     github: 'leman102',
+//     confirmAbout: true,
+//     about:
+//       'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et.',
+//     projects: [
+//       {
+//         name: 'Run Buddy',
+//         description:
+//           'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+//         languages: ['HTML', 'CSS'],
+//         link: 'https://github.com/leman102/run-buddy',
+//         feature: true,
+//         confirmAddProject: true
+//       },
+//       {
+//         name: 'Taskinator',
+//         description:
+//           'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+//         languages: ['JavaScript', 'HTML', 'CSS'],
+//         link: 'https://github.com/leman102/taskinator',
+//         feature: true,
+//         confirmAddProject: true
+//       },
+//       {
+//         name: 'Taskmaster Pro',
+//         description:
+//           'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque. Nulla eget fringilla nulla. Integer gravida magna mi, id efficitur metus tempus et. Nam fringilla elit dapibus pellentesque cursus.',
+//         languages: ['JavaScript', 'jQuery', 'CSS', 'HTML', 'Bootstrap'],
+//         link: 'https://github.com/leman102/taskmaster-pro',
+//         feature: false,
+//         confirmAddProject: true
+//       },
+//       {
+//         name: 'Robot Gladiators',
+//         description:
+//           'Duis consectetur nunc nunc. Morbi finibus non sapien nec pharetra. Fusce nec dignissim orci, ac interdum ipsum. Morbi mattis justo sed commodo pellentesque.',
+//         languages: ['JavaScript'],
+//         link: 'https://github.com/leman102/robot-gladiators',
+//         feature: false,
+//         confirmAddProject: false
+//       }
+//     ]
+//   };
 
-fs.writeFile('index.html',pageHTML,err => {
-    if(err) throw err;
-    console.log('Portfolio complete! Check out index.html to see the output!');
-});
-/*promptUser()
-    //.then(answers => console.log(answers))
-    .then(promptProject)
-    //.then(projectAnswers => console.log(projectAnswers));
-    .then(portfolioData => {
-        const pageHTML = generatePage(portfolioData);
-        
-        // fs.writeFile('./index.html', pageHTML, err => {
-        //   if (err) throw new Error(err);
 
-        //   console.log('Page created! Check out index.html in this directory to see it!');
-        // });
-    });*/
+// fs.writeFile('./dist/index.html', pageHTML, err => {
+//     if (err) {
+//       console.log(err);
+//       return;
+//     }
+//     console.log('Page created! Check out index.html in this directory to see it!');
+  
+//     fs.copyFile('./src/style.css', './dist/style.css', err => {
+//       if (err) {
+//         console.log(err);
+//         return;
+//       }
+//       console.log('Style sheet copied successfully!');
+//     });
+// });
+promptUser()
+  .then(promptProject)
+  .then(portfolioData => {
+    return generatePage(portfolioData);
+  })
+  .then(pageHTML => {
+    return writeFile(pageHTML);
+  })
+  .then(writeFileResponse => {
+    console.log(writeFileResponse);
+    return copyFile();
+  })
+  .then(copyFileResponse => {
+    console.log(copyFileResponse);
+  })
+  .catch(err => {
+    console.log(err);
+  });
